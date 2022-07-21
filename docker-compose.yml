@@ -1,0 +1,52 @@
+services:
+  app:
+    container_name: express_api
+    build:
+      dockerfile: Dockerfile
+      context: .
+      # Only will build development stage from our dockerfile
+      target: development
+    ports:
+      - ${PORT:-3000}:3000
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - expressapi_net
+    depends_on:
+      - mysql
+    # env_file:
+    # - .env
+    # Run a command against the development stage of the image
+    restart: unless-stopped
+    command: npm run dev
+
+  mysql:
+    container_name: mysql
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - 3306:3306
+    networks:
+      - expressapi_net      
+    volumes:
+      - express-mysql-data:/var/lib/mysql
+    restart: unless-stopped
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin:5
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+
+volumes:
+  express-mysql-data:
+networks:
+  expressapi_net:
