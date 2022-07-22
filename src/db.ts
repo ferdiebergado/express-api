@@ -1,14 +1,13 @@
 import mysql from "mysql";
 import config from "./config";
 
-const pool = mysql.createPool(config as mysql.PoolConfig);
+const pool = mysql.createPool(config.db);
 
-const connection = pool.getConnection((err, conn) => {
-  if (err) {
-    console.log(err.message);
-  } else {
-    console.log("Connected to the database.");
-  }
-});
+export const poolQuery = (query: string, values: any[]): Promise<any> =>
+  new Promise((resolve, reject) => {
+    pool.query(query, values, (err, results, _fields) => {
+      if (err) reject(err);
 
-export default connection;
+      resolve(results);
+    });
+  });
