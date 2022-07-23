@@ -1,13 +1,16 @@
+import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
-import pool from "./db";
 import authRouter from "./auth/auth.router";
 import { HTTP_STATUS } from "./http";
-import { HttpError } from "./errors";
+import { HttpError, ValidationError } from "./errors";
+import pool from "./db";
 
 pool
   .getConnection()
   .then(() => {
     console.log("Connected to the database.");
+
+    // TODO: close db connection on app close
   })
   .catch((err) => {
     throw err;
@@ -38,7 +41,16 @@ app.use((err: HttpError, _req: Request, res: Response, next: NextFunction) => {
 
   const statusCode = err.statusCode || HTTP_STATUS.SERVER_ERROR;
   console.error(err.stack);
-  res.status(statusCode).json({ message: err.message });
+  res.status(statusCode);
+
+  if (err instanceof ValidationError) {
+    res.json({
+      message: err.message,
+      errors: err.getErrors(),
+    });
+  } else {
+    res.json({ message: err.message });
+  }
 });
 
 export default app;

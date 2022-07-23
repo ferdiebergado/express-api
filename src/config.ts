@@ -9,4 +9,13 @@ export default {
     database: process.env.MYSQL_DATABASE || "test",
     supportBigNumbers: true,
   } as mysql.PoolOptions,
+
+  validation: {
+    auth: {
+      password: {
+        minLength: 8,
+        maxLength: 100,
+      },
+    },
+  },
 };
