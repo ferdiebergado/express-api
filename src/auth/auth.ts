@@ -1,16 +1,19 @@
 import { FieldPacket, ResultSetHeader } from "mysql2";
+import argon from "argon2";
 import db from "../db";
-import { UserAlreadyExistsError, UserNotFoundError } from "../errors";
+import { UserAlreadyExistsError, UserNotFoundError } from "./auth.errors";
 
 export default {
   register: async (email: string, password: string) => {
-    const sql = "INSERT INTO users (email, password) VALUES (?, ?)";
-
     try {
-      const [rows, _]: [ResultSetHeader, FieldPacket[]] = await db.query(sql, [
-        email,
-        password,
-      ]);
+      const sqlCreateUser = "INSERT INTO users (email, password) VALUES (?, ?)";
+
+      const hashed = await argon.hash(password);
+
+      const [rows, _]: [ResultSetHeader, FieldPacket[]] = await db.query(
+        sqlCreateUser,
+        [email, hashed]
+      );
 
       return rows.insertId;
     } catch (error: any) {
@@ -23,17 +26,25 @@ export default {
   },
 
   login: async (email: string, password: string) => {
-    const sql =
-      "SELECT id, email FROM users WHERE email = ? AND password = ? LIMIT 1";
+    const sqlFindUserByEmail =
+      "SELECT id, email, password FROM users WHERE email = ? LIMIT 1";
 
-    const [rows, _]: [any[], FieldPacket[]] = await db.query(sql, [
-      email,
-      password,
-    ]);
+    const [users, _]: [any[], FieldPacket[]] = await db.query(
+      sqlFindUserByEmail,
+      [email]
+    );
 
-    if (rows.length === 0) throw new UserNotFoundError();
+    if (users.length === 0) throw new UserNotFoundError();
 
-    return rows[0];
+    const user = users[0];
+
+    const isMatch = await argon.verify(user.password, password);
+
+    if (!isMatch) throw new UserNotFoundError();
+
+    delete user.password;
+
+    return user;
   },
 
   // TODO

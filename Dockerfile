@@ -2,7 +2,7 @@
 # BUILD FOR LOCAL DEVELOPMENT
 ###################
 
-FROM node:18-alpine As development
+FROM node:16-alpine As development
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -17,6 +17,12 @@ COPY --chown=node:node package*.json ./
 
 # Install app dependencies using the `npm ci` command instead of `npm install`
 RUN npm ci
+
+RUN apk --no-cache --virtual add gcc
+
+RUN npm install -g node-gyp
+
+RUN CXX=g++ npm install argon2
 
 # Bundle app source
 COPY --chown=node:node . .
@@ -47,7 +53,7 @@ USER node
 # BUILD FOR PRODUCTION
 ###################
 
-FROM node:18-alpine As build
+FROM node:16-alpine As build
 
 WORKDIR /usr/src/app
 
@@ -73,7 +79,7 @@ USER node
 # PRODUCTION
 ###################
 
-FROM node:18-alpine As production
+FROM node:16-alpine As production
 
 # Copy the bundled code from the build stage to the production image
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
