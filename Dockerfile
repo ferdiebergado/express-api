@@ -12,11 +12,7 @@ WORKDIR /usr/src/app
 # Copying this first prevents re-running npm install on every code change.
 COPY --chown=node:node package*.json ./
 
-# check internet connectivity
-#RUN ping -c 4 google.com
-
-# Install app dependencies using the `npm ci` command instead of `npm install`
-RUN npm ci
+RUN npm install
 
 RUN apk --no-cache --virtual add gcc
 
@@ -30,8 +26,8 @@ COPY --chown=node:node . .
 # Use the node user from the image (instead of the root user)
 USER node
 
-# Run nestjs app in development mode
-# CMD ["npm", "run", "start:dev"]
+# Run app in development mode
+# CMD ["npm", "run", "dev"]
 
 ###################
 # BUILD FOR TESTING
@@ -46,8 +42,8 @@ RUN apk add git
 
 USER node
 
-# Run nestjs app in test mode
-#CMD ["npm", "run", "test:watch"]
+# Run app in test mode
+#CMD ["npm", "run", "test"]
 
 ###################
 # BUILD FOR PRODUCTION

@@ -15,8 +15,6 @@ services:
       - expressapi_net
     depends_on:
       - mysql
-    # env_file:
-    # - .env
     restart: unless-stopped
     # Run a command against the development stage of the image
     command: npm run dev
