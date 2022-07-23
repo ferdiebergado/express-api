@@ -1,5 +1,5 @@
 {
-    "name": "express",
+    "name": "express-api",
     "version": "1.0.0",
     "description": "REST api with minimal dependencies",
     "main": "dist/server.js",
