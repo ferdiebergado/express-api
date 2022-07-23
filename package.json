@@ -1,15 +1,29 @@
 {
     "name": "express",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "description": "REST api with minimal dependencies",
+    "main": "dist/server.js",
     "scripts": {
         "dev": "nodemon src/server.ts",
-        "test": "jest"
+        "test": "jest",
+        "docker:test": "docker exec -it express_api npm t"
     },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
+    "keywords": [
+        "rest",
+        "api",
+        "express",
+        "minimal",
+        "lightweight",
+        "mysql",
+        "no framework",
+        "docker",
+        "node",
+        "typescript",
+        "server",
+        "backend"
+    ],
+    "author": "Ferdinand Saporas Bergado <ferdiebergado@gmail.com>",
+    "license": "MIT",
     "dependencies": {
         "argon2": "0.28.7",
         "dotenv": "16.0.1",
