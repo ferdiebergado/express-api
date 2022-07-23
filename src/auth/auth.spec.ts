@@ -1,23 +1,28 @@
-import "dotenv/config";
 import request from "supertest";
 import app from "../app";
 import { faker } from "@faker-js/faker";
 import { HTTP_STATUS } from "../http";
 import messages from "../messages";
+import config from "../config";
 
+// app setup
+const api = request(app);
 const authUrl = "/auth";
+
+// test data
 const email = faker.internet.email();
-const password = faker.random.alpha(10);
+const password = faker.random.alpha(config.validation.auth.password.minLength);
 const userData = {
   email,
   password,
 };
-const api = request(app);
 
+// helper functions
 const postData = (url: string, data: Record<string, any>) => {
   return api.post(url).set("content-type", "application/json").send(data);
 };
 
+// test proper
 describe("POST /auth/register", () => {
   const registerUrl = authUrl + "/register";
 
