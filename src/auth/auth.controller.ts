@@ -1,18 +1,31 @@
 import { NextFunction, Request, Response } from "express";
-import * as auth from "./auth";
+import { HTTP_STATUS } from "../http";
+import auth from "./auth";
 
-export const register = (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { email, password } = req.body;
+export default {
+  register: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
 
-    const result = auth.register(email, password);
+      const id = await auth.register(email, password);
 
-    console.log(result);
+      res.status(HTTP_STATUS.CREATED).json({
+        id,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
 
-    res.status(201).json({
-      id: result,
-    });
-  } catch (error) {
-    next(error);
-  }
+  login: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { email, password } = req.body;
+
+      const result = await auth.login(email, password);
+
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
 };

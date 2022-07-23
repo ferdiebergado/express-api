@@ -1,4 +1,4 @@
-import mysql from "mysql";
+import mysql from "mysql2";
 
 export default {
   db: {
@@ -8,5 +8,5 @@ export default {
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE || "test",
     supportBigNumbers: true,
-  } as mysql.PoolConfig,
+  } as mysql.PoolOptions,
 };

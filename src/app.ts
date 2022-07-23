@@ -1,13 +1,17 @@
 import express, { NextFunction, Request, Response } from "express";
 import pool from "./db";
 import authRouter from "./auth/auth.router";
+import { HTTP_STATUS } from "./http";
 import { HttpError } from "./errors";
 
-pool.getConnection((err) => {
-  if (err) throw err;
-
-  console.log("Connected to the database.");
-});
+pool
+  .getConnection()
+  .then(() => {
+    console.log("Connected to the database.");
+  })
+  .catch((err) => {
+    throw err;
+  });
 
 const app = express();
 
@@ -21,8 +25,8 @@ app.get("/", (_req, res) => {
 
 app.use("/auth", authRouter);
 
-app.all("*", (req, res) => {
-  res.status(404).json({
+app.all("*", (_req, res) => {
+  res.status(HTTP_STATUS.NOT_FOUND).json({
     message: "Not found.",
   });
 });
@@ -32,8 +36,8 @@ app.use((err: HttpError, _req: Request, res: Response, next: NextFunction) => {
     return next(err);
   }
 
-  const statusCode = err.statusCode || 500;
-  console.error(err.message, err.stack);
+  const statusCode = err.statusCode || HTTP_STATUS.SERVER_ERROR;
+  console.error(err.stack);
   res.status(statusCode).json({ message: err.message });
 });
 
