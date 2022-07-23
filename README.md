@@ -2,7 +2,7 @@
 
 A REST api built on express with minimal dependencies.
 
-**Usage**
+## Usage
 
 1. Clone the repository:
 
@@ -14,4 +14,30 @@ A REST api built on express with minimal dependencies.
 
 3. Run the application:
 
+**Locally**
+
 `npm run dev`
+
+**Using Docker**
+
+`npm docker:dev`
+
+4. Make a request to locahost:3000:
+
+`curl localhost:3000`
+
+## Endpoints
+
+**Authentication**
+
+- POST /auth/register
+- POST /auth/login
+
+  - Example data:
+
+  ```json
+  {
+    "email": "abc@example.com",
+    "password": "1234"
+  }
+  ```
