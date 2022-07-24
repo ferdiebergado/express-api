@@ -1,24 +1,28 @@
-import "dotenv/config";
-import mysql from "mysql2";
+import 'dotenv/config'
+import mysql from 'mysql2'
 
 const config = {
-  db: {
-    host: process.env.MYSQL_HOST || "localhost",
-    port: process.env.MYSQL_PORT || 3306,
-    user: process.env.MYSQL_USER || "user",
-    password: process.env.MYSQL_PASSWORD,
-    database: process.env.MYSQL_DATABASE || "test",
-    supportBigNumbers: true,
-  } as mysql.PoolOptions,
+    db: {
+        host: process.env.MYSQL_HOST || 'localhost',
+        port: process.env.MYSQL_PORT || 3306,
+        user: process.env.MYSQL_USER || 'user',
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE || 'test',
+        supportBigNumbers: true,
+    } as mysql.PoolOptions,
 
-  validation: {
-    auth: {
-      password: {
-        minLength: 8,
-        maxLength: 100,
-      },
+    validation: {
+        auth: {
+            password: {
+                minLength: 8,
+                maxLength: 100,
+            },
+        },
     },
-  },
-};
 
-export default config;
+    cors: {
+        origin: '*',
+    },
+}
+
+export default config
