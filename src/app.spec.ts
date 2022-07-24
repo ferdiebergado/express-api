@@ -1,6 +1,6 @@
 import request from "supertest";
 import app from "./app";
-import { HTTP_STATUS } from "./http";
+import { HTTP_STATUS } from "./lib/http";
 
 // app setup
 const api = request(app);

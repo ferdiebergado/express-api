@@ -1,6 +1,6 @@
 import { FieldPacket, ResultSetHeader } from "mysql2";
 import argon from "argon2";
-import db from "../db";
+import db from "../../db";
 import { UserAlreadyExistsError, UserNotFoundError } from "./auth.errors";
 
 export default {

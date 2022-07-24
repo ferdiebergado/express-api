@@ -1,32 +1,13 @@
 import { HTTP_STATUS } from "./http";
 
-export class ErrorBag {
-  private errors: Error[];
-
-  constructor() {
-    this.errors = [];
-  }
-
-  add(error: Error) {
-    this.errors.push(error);
-  }
-
-  getErrors() {
-    return this.errors;
-  }
-
-  hasErrors() {
-    return this.errors.length > 0;
-  }
-}
-
 export class HttpError extends Error {
   statusCode: number;
+  isOperational: boolean;
 
   constructor(statusCode: number, message: string) {
     super(message);
     this.statusCode = statusCode;
-    Error.captureStackTrace(this, this.constructor);
+    this.isOperational = true;
   }
 }
 

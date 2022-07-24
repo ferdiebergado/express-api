@@ -1,11 +1,11 @@
 import express from "express";
-import authRouter from "./auth/auth.router";
+import authRouter from "./lib/auth/auth.router";
 import {
   errorHandler,
   notFoundHandler,
   requestLogger,
-  rootHandler,
-} from "./middlewares";
+  homeHandler,
+} from "./lib/middlewares";
 
 const app = express();
 
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(requestLogger);
 
 // app routes
-app.get("/", rootHandler);
+app.get("/", homeHandler);
 app.use("/auth", authRouter);
 
 // error handlers

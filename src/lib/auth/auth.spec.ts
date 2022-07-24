@@ -1,9 +1,9 @@
 import request from "supertest";
-import app from "../app";
+import app from "../../app";
 import { faker } from "@faker-js/faker";
 import { HTTP_STATUS } from "../http";
-import messages from "../messages";
-import config from "../config";
+import messages from "../../messages";
+import config from "../../config";
 
 // app setup
 const api = request(app);

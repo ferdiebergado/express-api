@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import config from "../config";
+import config from "../../config";
 import { ValidationError } from "../errors";
-import messages from "../messages";
+import messages from "../../messages";
 
 const validateEmail = (email: string, validationError: ValidationError) => {
   if (!email) {
