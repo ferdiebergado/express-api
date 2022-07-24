@@ -43,7 +43,7 @@ export default {
   validateRegistration: (req: Request, _res: Response, next: NextFunction) => {
     const { email, password, password_confirmation } = req.body;
 
-    let validationError = new ValidationError();
+    const validationError = new ValidationError();
 
     validateEmail(email, validationError);
 
@@ -59,7 +59,7 @@ export default {
   validateLogin: (req: Request, _res: Response, next: NextFunction) => {
     const { email, password } = req.body;
 
-    let validationError = new ValidationError();
+    const validationError = new ValidationError();
 
     validateEmail(email, validationError);
 
