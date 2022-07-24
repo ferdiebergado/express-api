@@ -1,7 +1,7 @@
 import "dotenv/config";
 import mysql from "mysql2";
 
-export default {
+const config = {
   db: {
     host: process.env.MYSQL_HOST || "localhost",
     port: process.env.MYSQL_PORT || 3306,
@@ -20,3 +20,5 @@ export default {
     },
   },
 };
+
+export default config;
