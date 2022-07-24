@@ -14,10 +14,10 @@ export const requestLogger = (
 
     const processingTime = Date.now() - requestStart;
 
-    const timestamp = new Date(requestStart).toISOString();
+    // const timestamp = new Date(requestStart).toISOString();
 
     console.log(
-      `${timestamp}: ${method} ${url} HTTP ${httpVersion} -> ${res.statusCode} ${res.statusMessage} ${contentLength} bytes ${processingTime} ms`
+      `${method} ${url} HTTP ${httpVersion} ${res.statusCode} ${res.statusMessage} ${contentLength} bytes ${processingTime} ms`
     );
   });
 
