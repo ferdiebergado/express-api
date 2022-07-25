@@ -1,9 +1,10 @@
 export default {
-  email: {
-    required: "Email is required.",
-  },
-  password: {
-    required: "Password is required.",
-    dontMatch: "Passwords do not match",
-  },
-};
+    email: {
+        required: 'Email is required.',
+        invalid: 'Email is not a valid email.',
+    },
+    password: {
+        required: 'Password is required.',
+        dontMatch: 'Passwords do not match',
+    },
+}

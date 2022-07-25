@@ -1,74 +1,84 @@
-import { Request, Response, NextFunction } from "express";
-import config from "../../config";
-import { ValidationError } from "../errors";
-import messages from "../../messages";
+import { Request, Response, NextFunction } from 'express'
+import config from '../../config'
+import { ValidationError } from '../errors'
+import messages from '../../messages'
+import { isEmail } from '../utils'
 
 const validateEmail = (email: string, validationError: ValidationError) => {
-  if (!email) {
-    validationError.addError("email", messages.email.required);
-  }
-};
+    if (!email) {
+        validationError.addError('email', messages.email.required)
+    } else {
+        if (!isEmail(email))
+            validationError.addError('email', messages.email.invalid)
+    }
+}
 
 const validatePassword = (
-  password: string,
-  validationError: ValidationError,
-  passwordConfirmation?: string
+    password: string,
+    validationError: ValidationError,
+    passwordConfirmation?: string
 ) => {
-  if (!password) {
-    validationError.addError("password", messages.password.required);
-  } else {
-    if (passwordConfirmation && password !== passwordConfirmation) {
-      validationError.addError("password", messages.password.dontMatch);
+    if (!password) {
+        validationError.addError('password', messages.password.required)
     } else {
-      const { minLength, maxLength } = config.validation.auth.password;
+        if (passwordConfirmation && password !== passwordConfirmation) {
+            validationError.addError('password', messages.password.dontMatch)
+        } else {
+            const { minLength, maxLength } = config.validation.auth.password
 
-      if (password.length < minLength) {
-        validationError.addError(
-          "password",
-          `Password must have at least ${minLength} characters.`
-        );
-      }
+            if (password.length < minLength) {
+                validationError.addError(
+                    'password',
+                    `Password must have at least ${minLength} characters.`
+                )
+            }
 
-      if (password.length > maxLength) {
-        validationError.addError(
-          "password",
-          `Password must not exceeed ${maxLength} characters.`
-        );
-      }
+            if (password.length > maxLength) {
+                validationError.addError(
+                    'password',
+                    `Password must not exceeed ${maxLength} characters.`
+                )
+            }
+        }
     }
-  }
-};
+}
 
-export default {
-  validateRegistration: (req: Request, _res: Response, next: NextFunction) => {
-    const { email, password, password_confirmation } = req.body;
+export const validateRegistration = (
+    req: Request,
+    _res: Response,
+    next: NextFunction
+) => {
+    const { email, password, password_confirmation } = req.body
 
-    const validationError = new ValidationError();
+    const validationError = new ValidationError()
 
-    validateEmail(email, validationError);
+    validateEmail(email, validationError)
 
-    validatePassword(password, validationError, password_confirmation);
+    validatePassword(password, validationError, password_confirmation)
 
     if (validationError.hasErrors()) {
-      return next(validationError);
+        return next(validationError)
     }
 
-    next();
-  },
+    next()
+}
 
-  validateLogin: (req: Request, _res: Response, next: NextFunction) => {
-    const { email, password } = req.body;
+export const validateLogin = (
+    req: Request,
+    _res: Response,
+    next: NextFunction
+) => {
+    const { email, password } = req.body
 
-    const validationError = new ValidationError();
+    const validationError = new ValidationError()
 
-    validateEmail(email, validationError);
+    validateEmail(email, validationError)
 
-    validatePassword(password, validationError);
+    validatePassword(password, validationError)
 
     if (validationError.hasErrors()) {
-      return next(validationError);
+        return next(validationError)
     }
 
-    next();
-  },
-};
+    next()
+}
