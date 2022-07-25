@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
 import config from '../../config'
-import { ValidationError } from '../errors'
+import { UnauthorizedHttpError, ValidationError } from '../errors'
 import messages from '../../messages'
 import { isEmail } from '../utils'
+import { verifyToken } from '../utils/jwt'
 
 const validateEmail = (email: string, validationError: ValidationError) => {
     if (!email) {
@@ -81,4 +82,23 @@ export const validateLogin = (
     }
 
     next()
+}
+
+export const decodeToken = async (
+    req: Request,
+    _res: Response,
+    next: NextFunction
+) => {
+    try {
+        const authHeader = req.headers['authorization']
+        const token = authHeader && authHeader.split(' ')[1]
+
+        if (token == null) throw new UnauthorizedHttpError()
+
+        await verifyToken(token)
+
+        next()
+    } catch (error) {
+        next(error)
+    }
 }

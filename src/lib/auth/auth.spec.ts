@@ -15,6 +15,7 @@ const password = faker.random.alpha(config.validation.auth.password.minLength)
 const userData = {
     email,
     password,
+    password_confirmation: password,
 }
 
 // helper functions
@@ -48,5 +49,16 @@ describe('POST /auth/register', () => {
         expect(res.status).toEqual(HTTP_STATUS.UNPROCESSABLE_ENTITY)
         expect(res.body.errors[0].field).toEqual('email')
         expect(res.body.errors[0].errors[0]).toEqual(messages.email.invalid)
+    })
+})
+
+describe('POST /auth/login', () => {
+    const loginUrl = authUrl + '/login'
+
+    it('returns a token', async () => {
+        const res = await postData(loginUrl, { email, password })
+
+        expect(res.status).toEqual(HTTP_STATUS.OK)
+        expect(res.body.token).toBeDefined()
     })
 })

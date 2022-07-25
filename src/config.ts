@@ -23,6 +23,11 @@ const config = {
     cors: {
         origin: '*',
     },
+
+    jwt: {
+        secret: process.env.KEY || 'shhhhh',
+        expiration: '30m',
+    },
 }
 
 export default config

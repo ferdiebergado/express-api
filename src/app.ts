@@ -9,6 +9,7 @@ import {
     homeHandler,
 } from './lib/middlewares'
 import config from './config'
+import { userRouter } from './lib/users/user.router'
 
 const app = express()
 
@@ -28,6 +29,7 @@ app.use(express.urlencoded({ extended: false }))
 // app routes
 app.get('/', homeHandler)
 app.use('/auth', authRouter)
+app.use('/users', userRouter)
 app.get('/healthcheck', healthChecker)
 
 // error handlers
