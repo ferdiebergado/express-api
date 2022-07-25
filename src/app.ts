@@ -16,6 +16,7 @@ const app = express()
 app.disable('x-powered-by')
 
 // middlewares
+app.use(requestLogger)
 app.use(
     cors({
         origin: config.cors.origin,
@@ -23,7 +24,6 @@ app.use(
 )
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(requestLogger)
 
 // app routes
 app.get('/', homeHandler)
